@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
@@ -11,7 +11,7 @@
         <AssemblyName>ThemeIt</AssemblyName>
         <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
-        <LangVersion>8</LangVersion>
+        <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -53,6 +53,11 @@
             <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\ICities.dll</HintPath>
             <Private>False</Private>
         </Reference>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
+        <Reference Include="System.Xml.Linq" />
         <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\UnityEngine.dll</HintPath>
             <Private>False</Private>
@@ -60,6 +65,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="HarmonyPatcher.cs" />
+        <Compile Include="Patches.cs" />
         <Compile Include="ThemeItMod.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
@@ -67,6 +73,49 @@
       <None Include="packages.config" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Import Project="..\ModsCommon\AutoLayoutPanelShared\AutoLayoutPanelShared.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\CustomUIShared\CustomUIShared.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\DependencyShared\DependencyShared.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.projitems" Label="Shared" />
+<!--    <Import Project="..\ModsCommon\MathExtension\MathExtension.projitems" Label="Shared" />-->
+    <Import Project="..\ModsCommon\MessageBoxShared\MessageBoxShared.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\LoggerShared\LoggerShared.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\SimpleMessageBoxShared\SimpleMessageBoxShared.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\WhatsNewMessageBoxShared\WhatsNewMessageBoxShared.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\ModShared\ModsCommonShared.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\PluginsShared\PluginsShared.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\SingletonShared\SingletonShared.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\UIShared\ModsUIShared.projitems" Label="Shared" />
+<!--    <Import Project="..\ModsCommon\LoadExtensionShared\LoadExtensionShared.projitems" Label="Shared" />-->
+<!--    <Import Project="..\ModsCommon\ToolShared\ModsToolShared.projitems" Label="Shared" />-->
+<!--    <Import Project="..\ModsCommon\RenderExtension\RenderExtension.projitems" Label="Shared" />-->
+<!--    <Import Project="..\ModsCommon\ObjectMapShared\ObjectMapShared.projitems" Label="Shared" />-->
+<!--    <Import Project="..\ModsCommon\TrajectoryShared\TrajectoryShared.projitems" Label="Shared" />-->
+<!--    <Import Project="..\ModsCommon\XmlExtension\XmlExtension.projitems" Label="Shared" />-->
+<!--    <Import Project="..\ModsCommon\NetExtension\NetExtension.projitems" Label="Shared" />-->
+<!--    <Import Project="..\ModsCommon\ToolPanelShared\ToolPanelShared.projitems" Label="Shared" />-->
+<!--    <Import Project="..\ModsCommon\PropertyPanelShared\PropertyPanelShared.projitems" Label="Shared" />-->
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.ru.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.es.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.de.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.fi.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.ja.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.zh-CN.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.pl.projitems" Label="Shared" />
+<!--    <Import Project="..\ModsCommon\HarmonyReportShared\HarmonyReportShared.projitems" Label="Shared" />-->
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.fr.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.nl.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.pt.projitems" Label="Shared" />
+<!--    <Import Project="..\ModsCommon\ColorsShared\ColorsShared.projitems" Label="Shared" />-->
+<!--    <Import Project="..\ModsCommon\MultyAtlasButton\MultyAtlasButton.projitems" Label="Shared" />-->
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.it.projitems" Label="Shared" />
+<!--    <Import Project="..\ModsCommon\PropertyValueShared\PropertyValueShared.projitems" Label="Shared" />-->
+<!--    <Import Project="..\ModsCommon\HeaderShared\HeaderShared.projitems" Label="Shared" />-->
+<!--    <Import Project="..\ModsCommon\UUIRegisterShared\UUIRegisterShared.projitems" Label="Shared" />-->
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.ko.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.hu.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.da.projitems" Label="Shared" />
+    <Import Project="..\ModsCommon\LocalizeShared\LocalizeShared.tr.projitems" Label="Shared" />
 
     <Target Name="DeployToModDirectory" AfterTargets="Build">
         <PropertyGroup>
