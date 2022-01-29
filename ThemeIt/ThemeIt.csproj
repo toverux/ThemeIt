@@ -64,7 +64,6 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="HarmonyPatcher.cs" />
         <Compile Include="Patches\PoliciesPanelPatches.cs" />
         <Compile Include="Patches\RandomBuildingInfoPatches.cs" />
         <Compile Include="ThemeItMod.cs" />
