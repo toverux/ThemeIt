@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ModsCommon;
+using ThemeIt.Patches;
 
 namespace ThemeIt {
     // ReSharper disable once UnusedType.Global
@@ -24,19 +25,37 @@ namespace ThemeIt {
         protected override bool PatchProcess() {
             var success = true;
 
+            success &= this.AddPostfix(
+                typeof(PoliciesPanelPatches),
+                nameof(PoliciesPanelPatches.PostfixAwake),
+                typeof(PoliciesPanel),
+                "Awake");
+
             success &= this.AddTranspiler(
-                typeof(Patches), nameof(Patches.TranspileZoneBlockSimulationStep),
-                typeof(ZoneBlock), nameof(ZoneBlock.SimulationStep),
+                typeof(PoliciesPanelPatches),
+                nameof(PoliciesPanelPatches.TranspileRefreshPanel),
+                typeof(PoliciesPanel),
+                "RefreshPanel");
+
+            success &= this.AddTranspiler(
+                typeof(RandomBuildingInfoPatches),
+                nameof(RandomBuildingInfoPatches.TranspileZoneBlockSimulationStep),
+                typeof(ZoneBlock),
+                nameof(ZoneBlock.SimulationStep),
                 new[] { typeof(ushort) });
 
             success &= this.AddTranspiler(
-                typeof(Patches), nameof(Patches.TranspilePrivateBuildingAiGetUpgradeInfo),
-                typeof(PrivateBuildingAI), nameof(PrivateBuildingAI.GetUpgradeInfo),
+                typeof(RandomBuildingInfoPatches),
+                nameof(RandomBuildingInfoPatches.TranspilePrivateBuildingAiGetUpgradeInfo),
+                typeof(PrivateBuildingAI),
+                nameof(PrivateBuildingAI.GetUpgradeInfo),
                 new[] { typeof(ushort), typeof(Building).MakeByRefType() });
 
             success &= this.AddTranspiler(
-                typeof(Patches), nameof(Patches.TranspilePrivateBuildingAiSimulationStep),
-                typeof(PrivateBuildingAI), nameof(PrivateBuildingAI.SimulationStep),
+                typeof(RandomBuildingInfoPatches),
+                nameof(RandomBuildingInfoPatches.TranspilePrivateBuildingAiSimulationStep),
+                typeof(PrivateBuildingAI),
+                nameof(PrivateBuildingAI.SimulationStep),
                 new[] { typeof(ushort), typeof(Building).MakeByRefType(), typeof(Building.Frame).MakeByRefType() });
 
             return success;

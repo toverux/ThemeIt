@@ -6,28 +6,28 @@ using ColossalFramework.Math;
 using HarmonyLib;
 using UnityEngine;
 
-namespace ThemeIt;
+namespace ThemeIt.Patches;
 
-public static class Patches {
+public static class RandomBuildingInfoPatches {
     private static readonly MethodInfo GetRandomBuildingInfoMethod = AccessTools.Method(
         typeof(BuildingManager),
         nameof(BuildingManager.GetRandomBuildingInfo));
 
     private static readonly MethodInfo GetRandomBuildingInfoPatchMethod = AccessTools.Method(
-        typeof(Patches),
-        nameof(Patches.GetRandomBuildingInfoPatch));
+        typeof(RandomBuildingInfoPatches),
+        nameof(RandomBuildingInfoPatches.GetRandomBuildingInfoPatch));
     
     public static IEnumerable<CodeInstruction> TranspileZoneBlockSimulationStep(
         IEnumerable<CodeInstruction> instructions) =>
-        Patches.TranspileGetRandomBuildingInfoConsumer(instructions, 64);
+        RandomBuildingInfoPatches.TranspileGetRandomBuildingInfoConsumer(instructions, 64);
     
     public static IEnumerable<CodeInstruction> TranspilePrivateBuildingAiGetUpgradeInfo(
         IEnumerable<CodeInstruction> instructions) =>
-        Patches.TranspileGetRandomBuildingInfoConsumer(instructions, 4);
+        RandomBuildingInfoPatches.TranspileGetRandomBuildingInfoConsumer(instructions, 4);
 
     public static IEnumerable<CodeInstruction> TranspilePrivateBuildingAiSimulationStep(
         IEnumerable<CodeInstruction> instructions) =>
-        Patches.TranspileGetRandomBuildingInfoConsumer(instructions, 21);
+        RandomBuildingInfoPatches.TranspileGetRandomBuildingInfoConsumer(instructions, 21);
 
     public static IEnumerable<CodeInstruction> TranspileGetRandomBuildingInfoConsumer(
         IEnumerable<CodeInstruction> instructions,
@@ -36,11 +36,11 @@ public static class Patches {
         var targetSiteFound = false;
 
         foreach (var instruction in instructions) {
-            if (instruction.Is(OpCodes.Callvirt, Patches.GetRandomBuildingInfoMethod)) {
+            if (instruction.Is(OpCodes.Callvirt, RandomBuildingInfoPatches.GetRandomBuildingInfoMethod)) {
                 targetSiteFound = true;
 
                 yield return new CodeInstruction(OpCodes.Ldloc_S, districtLocalVariableIndex);
-                yield return new CodeInstruction(OpCodes.Call, Patches.GetRandomBuildingInfoPatchMethod);
+                yield return new CodeInstruction(OpCodes.Call, RandomBuildingInfoPatches.GetRandomBuildingInfoPatchMethod);
             }
             else {
                 yield return instruction;
