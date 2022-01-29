@@ -68,6 +68,7 @@
         <Compile Include="Patches\RandomBuildingInfoPatches.cs" />
         <Compile Include="ThemeItMod.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="GUI\UIUtils.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />

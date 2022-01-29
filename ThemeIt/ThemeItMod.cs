@@ -9,7 +9,7 @@ namespace ThemeIt {
         public override string NameRaw => "Theme It";
 
         public override List<Version> Versions => new() {
-            new Version(1,0,0)
+            new Version(1, 0, 0)
         };
 
         protected override string IdRaw => "ThemeIt";
@@ -26,36 +26,32 @@ namespace ThemeIt {
             var success = true;
 
             success &= this.AddPostfix(
-                typeof(PoliciesPanelPatches),
-                nameof(PoliciesPanelPatches.PostfixAwake),
-                typeof(PoliciesPanel),
-                "Awake");
+                typeof(PoliciesPanelPatches), nameof(PoliciesPanelPatches.PostfixAwake),
+                typeof(PoliciesPanel), "Awake");
 
             success &= this.AddTranspiler(
-                typeof(PoliciesPanelPatches),
-                nameof(PoliciesPanelPatches.TranspileRefreshPanel),
-                typeof(PoliciesPanel),
-                "RefreshPanel");
+                typeof(PoliciesPanelPatches), nameof(PoliciesPanelPatches.TranspileRefreshPanel),
+                typeof(PoliciesPanel), "RefreshPanel");
+
+            success &= this.AddPostfix(
+                typeof(PoliciesPanelPatches), nameof(PoliciesPanelPatches.PostfixSet),
+                typeof(PoliciesPanel), nameof(PoliciesPanel.Set));
 
             success &= this.AddTranspiler(
-                typeof(RandomBuildingInfoPatches),
-                nameof(RandomBuildingInfoPatches.TranspileZoneBlockSimulationStep),
-                typeof(ZoneBlock),
-                nameof(ZoneBlock.SimulationStep),
+                typeof(RandomBuildingInfoPatches), nameof(RandomBuildingInfoPatches.TranspileZoneBlockSimulationStep),
+                typeof(ZoneBlock), nameof(ZoneBlock.SimulationStep),
                 new[] { typeof(ushort) });
 
             success &= this.AddTranspiler(
                 typeof(RandomBuildingInfoPatches),
                 nameof(RandomBuildingInfoPatches.TranspilePrivateBuildingAiGetUpgradeInfo),
-                typeof(PrivateBuildingAI),
-                nameof(PrivateBuildingAI.GetUpgradeInfo),
+                typeof(PrivateBuildingAI), nameof(PrivateBuildingAI.GetUpgradeInfo),
                 new[] { typeof(ushort), typeof(Building).MakeByRefType() });
 
             success &= this.AddTranspiler(
                 typeof(RandomBuildingInfoPatches),
                 nameof(RandomBuildingInfoPatches.TranspilePrivateBuildingAiSimulationStep),
-                typeof(PrivateBuildingAI),
-                nameof(PrivateBuildingAI.SimulationStep),
+                typeof(PrivateBuildingAI), nameof(PrivateBuildingAI.SimulationStep),
                 new[] { typeof(ushort), typeof(Building).MakeByRefType(), typeof(Building.Frame).MakeByRefType() });
 
             return success;
