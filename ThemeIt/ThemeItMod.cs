@@ -1,60 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using CitiesHarmony.API;
 using ModsCommon;
-using ThemeIt.Patches;
 
-namespace ThemeIt {
-    // ReSharper disable once UnusedType.Global
-    public class ThemeItMod : BasePatcherMod<ThemeItMod> {
-        public override string NameRaw => "Theme It";
+namespace ThemeIt; 
 
-        public override List<Version> Versions => new() {
-            new Version(1, 0, 0)
-        };
+// ReSharper disable once UnusedType.Global
+public sealed class ThemeItMod : BaseMod<ThemeItMod> {
+    public override string NameRaw => "Theme It";
 
-        protected override string IdRaw => "ThemeIt";
+    public override List<Version> Versions => new() {
+        new Version(0, 0, 1)
+    };
 
-        public override bool IsBeta => false;
+    protected override string IdRaw => "ThemeIt";
 
-        public override string Description => "Create themes for growables and apply them to cities and districts.";
+    public override bool IsBeta => true;
 
-        protected override ulong StableWorkshopId => 0;
+    public override string Description => "Create themes for growables and apply them to cities and districts.";
 
-        protected override ulong BetaWorkshopId => 0;
+    protected override ulong StableWorkshopId => 0;
 
-        protected override bool PatchProcess() {
-            var success = true;
+    protected override ulong BetaWorkshopId => 0;
+        
+    private Patcher Patcher { get; }
 
-            success &= this.AddPostfix(
-                typeof(PoliciesPanelPatches), nameof(PoliciesPanelPatches.PostfixAwake),
-                typeof(PoliciesPanel), "Awake");
+    public ThemeItMod() {
+        this.Patcher = new Patcher(this.IdRaw, this.Logger);
+    }
 
-            success &= this.AddTranspiler(
-                typeof(PoliciesPanelPatches), nameof(PoliciesPanelPatches.TranspileRefreshPanel),
-                typeof(PoliciesPanel), "RefreshPanel");
+    protected override void Enable() {
+        HarmonyHelper.DoOnHarmonyReady(() => Patcher.PatchAll());
+    }
 
-            success &= this.AddPostfix(
-                typeof(PoliciesPanelPatches), nameof(PoliciesPanelPatches.PostfixSet),
-                typeof(PoliciesPanel), nameof(PoliciesPanel.Set));
-
-            success &= this.AddTranspiler(
-                typeof(RandomBuildingInfoPatches), nameof(RandomBuildingInfoPatches.TranspileZoneBlockSimulationStep),
-                typeof(ZoneBlock), nameof(ZoneBlock.SimulationStep),
-                new[] { typeof(ushort) });
-
-            success &= this.AddTranspiler(
-                typeof(RandomBuildingInfoPatches),
-                nameof(RandomBuildingInfoPatches.TranspilePrivateBuildingAiGetUpgradeInfo),
-                typeof(PrivateBuildingAI), nameof(PrivateBuildingAI.GetUpgradeInfo),
-                new[] { typeof(ushort), typeof(Building).MakeByRefType() });
-
-            success &= this.AddTranspiler(
-                typeof(RandomBuildingInfoPatches),
-                nameof(RandomBuildingInfoPatches.TranspilePrivateBuildingAiSimulationStep),
-                typeof(PrivateBuildingAI), nameof(PrivateBuildingAI.SimulationStep),
-                new[] { typeof(ushort), typeof(Building).MakeByRefType(), typeof(Building.Frame).MakeByRefType() });
-
-            return success;
+    protected override void Disable() {
+        if (HarmonyHelper.IsHarmonyInstalled) {
+            Patcher.UnpatchAll();
         }
     }
 }

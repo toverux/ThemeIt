@@ -8,26 +8,14 @@ using UnityEngine;
 
 namespace ThemeIt.Patches;
 
-public static class RandomBuildingInfoPatches {
+public static class RandomBuildingInfoPatcher {
     private static readonly MethodInfo GetRandomBuildingInfoMethod = AccessTools.Method(
         typeof(BuildingManager),
         nameof(BuildingManager.GetRandomBuildingInfo));
 
     private static readonly MethodInfo GetRandomBuildingInfoPatchMethod = AccessTools.Method(
-        typeof(RandomBuildingInfoPatches),
-        nameof(RandomBuildingInfoPatches.GetRandomBuildingInfoPatch));
-    
-    public static IEnumerable<CodeInstruction> TranspileZoneBlockSimulationStep(
-        IEnumerable<CodeInstruction> instructions) =>
-        RandomBuildingInfoPatches.TranspileGetRandomBuildingInfoConsumer(instructions, 64);
-    
-    public static IEnumerable<CodeInstruction> TranspilePrivateBuildingAiGetUpgradeInfo(
-        IEnumerable<CodeInstruction> instructions) =>
-        RandomBuildingInfoPatches.TranspileGetRandomBuildingInfoConsumer(instructions, 4);
-
-    public static IEnumerable<CodeInstruction> TranspilePrivateBuildingAiSimulationStep(
-        IEnumerable<CodeInstruction> instructions) =>
-        RandomBuildingInfoPatches.TranspileGetRandomBuildingInfoConsumer(instructions, 21);
+        typeof(RandomBuildingInfoPatcher),
+        nameof(RandomBuildingInfoPatcher.GetRandomBuildingInfoPatch));
 
     public static IEnumerable<CodeInstruction> TranspileGetRandomBuildingInfoConsumer(
         IEnumerable<CodeInstruction> instructions,
@@ -36,11 +24,11 @@ public static class RandomBuildingInfoPatches {
         var targetSiteFound = false;
 
         foreach (var instruction in instructions) {
-            if (instruction.Is(OpCodes.Callvirt, RandomBuildingInfoPatches.GetRandomBuildingInfoMethod)) {
+            if (instruction.Is(OpCodes.Callvirt, RandomBuildingInfoPatcher.GetRandomBuildingInfoMethod)) {
                 targetSiteFound = true;
 
                 yield return new CodeInstruction(OpCodes.Ldloc_S, districtLocalVariableIndex);
-                yield return new CodeInstruction(OpCodes.Call, RandomBuildingInfoPatches.GetRandomBuildingInfoPatchMethod);
+                yield return new CodeInstruction(OpCodes.Call, RandomBuildingInfoPatcher.GetRandomBuildingInfoPatchMethod);
             }
             else {
                 yield return instruction;

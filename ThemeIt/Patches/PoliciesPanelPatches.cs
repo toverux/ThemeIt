@@ -4,10 +4,12 @@ using System.Reflection;
 using System.Reflection.Emit;
 using ColossalFramework.UI;
 using HarmonyLib;
+using JetBrains.Annotations;
 using UIUtils = ThemeIt.GUI.UIUtils;
 
 namespace ThemeIt.Patches;
 
+[HarmonyPatch(typeof(PoliciesPanel)), UsedImplicitly]
 public static class PoliciesPanelPatches {
     private static readonly MethodInfo UiTabStripTabCountMethod = AccessTools.PropertyGetter(
         typeof(UITabstrip),
@@ -23,6 +25,8 @@ public static class PoliciesPanelPatches {
      * inserted. For that we basically insert a "- 1" in CIL after this.m_Tabstrip.tabCount, the iteration limit, so
      * that is ignored.
      */
+    [HarmonyTranspiler, UsedImplicitly]
+    [HarmonyPatch("RefreshPanel")]
     public static IEnumerable<CodeInstruction> TranspileRefreshPanel(IEnumerable<CodeInstruction> instructions) {
         var foundTabIndexLdloc3 = false;
         var targetSiteFound = false;
@@ -60,6 +64,8 @@ public static class PoliciesPanelPatches {
         }
     }
 
+    [HarmonyPostfix, UsedImplicitly]
+    [HarmonyPatch("Awake")]
     public static void PostfixAwake(PoliciesPanel __instance) {
         //=> Find the list of tabs in policies panel
         var tabStrip = __instance.Find<UITabstrip>("Tabstrip");
@@ -102,11 +108,13 @@ public static class PoliciesPanelPatches {
         showThemeManager.text = "Theme Manager";
     }
 
+    [HarmonyPostfix, UsedImplicitly]
+    [HarmonyPatch(nameof(PoliciesPanel.Set))]
     public static void PostfixSet(byte district) {
         if (PoliciesPanelPatches.enableThemeManagementCheckBox is not null) {
             PoliciesPanelPatches.enableThemeManagementCheckBox.text = district == 0
-                ? "Enable city-wide theme management"
-                : "Enable district theme management";
+                ? "Enable Theme Management for this city"
+                : "Enable Theme Management for this district";
         }
     }
 }
