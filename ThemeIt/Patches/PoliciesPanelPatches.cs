@@ -109,7 +109,7 @@ public static class PoliciesPanelPatches {
     }
 
     [HarmonyPostfix, UsedImplicitly]
-    [HarmonyPatch(nameof(PoliciesPanel.Set))]
+    [HarmonyPatch(nameof(PoliciesPanel.Set), typeof(byte))]
     public static void PostfixSet(byte district) {
         if (PoliciesPanelPatches.enableThemeManagementCheckBox is not null) {
             PoliciesPanelPatches.enableThemeManagementCheckBox.text = district == 0

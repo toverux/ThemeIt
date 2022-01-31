@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CitiesHarmony.API;
 using ModsCommon;
+using ModsCommon.UI;
 
 namespace ThemeIt; 
 
@@ -30,12 +31,22 @@ public sealed class ThemeItMod : BaseMod<ThemeItMod> {
     }
 
     protected override void Enable() {
-        HarmonyHelper.DoOnHarmonyReady(() => Patcher.PatchAll());
+        HarmonyHelper.DoOnHarmonyReady(() => {
+            try {
+                this.Patcher.PatchAll();
+            }
+            catch {
+                var message = MessageBox.Show<ErrorPatchMessageBox>();
+                message.Init<ThemeItMod>();
+
+                throw;
+            }
+        });
     }
 
     protected override void Disable() {
         if (HarmonyHelper.IsHarmonyInstalled) {
-            Patcher.UnpatchAll();
+            this.Patcher.UnpatchAll();
         }
     }
 }
