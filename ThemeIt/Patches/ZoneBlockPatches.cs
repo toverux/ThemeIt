@@ -11,5 +11,5 @@ public static class ZoneBlockPatches {
     [HarmonyPatch(nameof(ZoneBlock.SimulationStep), typeof(ushort))]
     public static IEnumerable<CodeInstruction> TranspileSimulationStep(
         IEnumerable<CodeInstruction> instructions) =>
-        RandomBuildingInfoPatcher.TranspileGetRandomBuildingInfoConsumer(instructions, 64);
+        RandomBuildingInfoPatcher.TranspileGetRandomBuildingInfoConsumer(instructions);
 }

@@ -44,13 +44,13 @@ public static class PoliciesPanelPatches {
             else if (
                 !targetSiteFound &&
                 foundTabIndexLdloc3 &&
-                instruction.Is(OpCodes.Callvirt, PoliciesPanelPatches.UiTabStripTabCountMethod)) {
+                instruction.Calls(PoliciesPanelPatches.UiTabStripTabCountMethod)) {
                 //=> We found the target site, the reading of tabCount, to which we must subtract 1.
 
                 targetSiteFound = true;
 
                 yield return instruction; // the callvirt, pushes the tab count
-                yield return new CodeInstruction(OpCodes.Ldc_I4_1); // push 1 
+                yield return new CodeInstruction(OpCodes.Ldc_I4_1); // push 1
                 yield return new CodeInstruction(OpCodes.Sub_Ovf_Un); // subtract that 1 off tabCount
             }
             else {
@@ -75,7 +75,7 @@ public static class PoliciesPanelPatches {
         // Base game changes those tabs' text scale
         tab.textScale = ((UIButton) tabStrip.tabs[0]).textScale;
 
-        //=> this.SetParentButton expects all tabs to have a TutorialUITag, we add an empty one. 
+        //=> this.SetParentButton expects all tabs to have a TutorialUITag, we add an empty one.
         tab.gameObject.AddComponent<TutorialUITag>();
 
         //=> Initialize tab contents

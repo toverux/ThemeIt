@@ -2,7 +2,7 @@
 using HarmonyLib;
 using JetBrains.Annotations;
 
-namespace ThemeIt.Patches; 
+namespace ThemeIt.Patches;
 
 [HarmonyPatch(typeof(PrivateBuildingAI)), UsedImplicitly]
 // ReSharper disable once InconsistentNaming
@@ -14,7 +14,7 @@ public static class PrivateBuildingAIPatches {
         new[] { ArgumentType.Normal, ArgumentType.Ref })]
     public static IEnumerable<CodeInstruction> TranspileGetUpgradeInfo(
         IEnumerable<CodeInstruction> instructions) =>
-        RandomBuildingInfoPatcher.TranspileGetRandomBuildingInfoConsumer(instructions, 4);
+        RandomBuildingInfoPatcher.TranspileGetRandomBuildingInfoConsumer(instructions);
 
     [HarmonyTranspiler, UsedImplicitly]
     [HarmonyPatch(
@@ -23,5 +23,5 @@ public static class PrivateBuildingAIPatches {
         new[] { ArgumentType.Normal, ArgumentType.Ref, ArgumentType.Ref })]
     public static IEnumerable<CodeInstruction> TranspileSimulationStep(
         IEnumerable<CodeInstruction> instructions) =>
-        RandomBuildingInfoPatcher.TranspileGetRandomBuildingInfoConsumer(instructions, 21);
+        RandomBuildingInfoPatcher.TranspileGetRandomBuildingInfoConsumer(instructions);
 }
