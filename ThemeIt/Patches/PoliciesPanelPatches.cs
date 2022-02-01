@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using ColossalFramework.UI;
 using HarmonyLib;
 using JetBrains.Annotations;
+using UnityEngine;
 using UIUtils = ThemeIt.GUI.UIUtils;
 
 namespace ThemeIt.Patches;
@@ -15,7 +16,13 @@ public static class PoliciesPanelPatches {
         typeof(UITabstrip),
         nameof(UITabstrip.tabCount));
 
+    private static PoliciesPanel? currentInstance;
+
     private static UICheckBox? enableThemeManagementCheckBox;
+
+    private static UITabstrip FindTabStrip(this UICustomControl panel) => panel.Find<UITabstrip>("Tabstrip");
+
+    private static UIScrollbar FindScrollbar(this UICustomControl panel) => panel.Find<UIScrollbar>("Scrollbar");
 
     /**
      * Base game iterates over policies panel tabs and uses their name to hydrate them dynamically with a list of
@@ -67,8 +74,7 @@ public static class PoliciesPanelPatches {
     [HarmonyPostfix, UsedImplicitly]
     [HarmonyPatch("Awake")]
     public static void PostfixAwake(PoliciesPanel __instance) {
-        //=> Find the list of tabs in policies panel
-        var tabStrip = __instance.Find<UITabstrip>("Tabstrip");
+        var tabStrip = __instance.FindTabStrip();
 
         //=> Add a custom tab
         var tab = tabStrip.AddTab("Themes");
@@ -109,6 +115,26 @@ public static class PoliciesPanelPatches {
     }
 
     [HarmonyPostfix, UsedImplicitly]
+    [HarmonyPatch("OnEnable")]
+    public static void PostfixOnEnable(PoliciesPanel __instance) {
+        PoliciesPanelPatches.currentInstance = __instance;
+
+        var tabStrip = __instance.FindTabStrip();
+
+        tabStrip.eventSelectedIndexChanged += PoliciesPanelPatches.OnTabStripSelectedIndexChanged;
+    }
+
+    [HarmonyPostfix, UsedImplicitly]
+    [HarmonyPatch("OnDisable")]
+    public static void PostfixOnDisable(PoliciesPanel __instance) {
+        var tabStrip = __instance.FindTabStrip();
+
+        tabStrip.eventSelectedIndexChanged -= PoliciesPanelPatches.OnTabStripSelectedIndexChanged;
+
+        PoliciesPanelPatches.currentInstance = null;
+    }
+
+    [HarmonyPostfix, UsedImplicitly]
     [HarmonyPatch(nameof(PoliciesPanel.Set), typeof(byte))]
     public static void PostfixSet(byte district) {
         if (PoliciesPanelPatches.enableThemeManagementCheckBox is not null) {
@@ -116,5 +142,18 @@ public static class PoliciesPanelPatches {
                 ? "Enable Theme Management for this city"
                 : "Enable Theme Management for this district";
         }
+    }
+
+    private static void OnTabStripSelectedIndexChanged(UIComponent component, int tabIndex) {
+        if (PoliciesPanelPatches.currentInstance is null) {
+            return;
+        }
+
+        var tabStrip = PoliciesPanelPatches.currentInstance.FindTabStrip();
+        var toolbar = PoliciesPanelPatches.currentInstance.FindScrollbar();
+
+        var themesPageIndex = tabStrip.tabPages.childCount - 1;
+
+        toolbar.enabled = tabIndex != themesPageIndex;
     }
 }
