@@ -1,0 +1,29 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ThemeItMod_Description" xml:space="preserve">
+        <value>Créez des thèmes pour les growables et appliquez-les sur des villes et districts.</value>
+    </data>
+    <data name="GUI_ThemesTabManager_EnableThemeManagementForCity" xml:space="preserve">
+        <value>Activer la gestion de thèmes pour cette ville</value>
+    </data>
+    <data name="GUI_ThemesTabManager_EnableThemeManagementForDistrict" xml:space="preserve">
+        <value>Activer la gestion de thèmes pour ce district</value>
+    </data>
+    <data name="GUI_ThemesTabManager_OpenThemeManager" xml:space="preserve">
+        <value>Ouvrir le gestionnaire de thèmes</value>
+    </data>
+    <data name="GUI_ThemesTabManager_TabTitle" xml:space="preserve">
+        <value>Thèmes</value>
+    </data>
+</root>

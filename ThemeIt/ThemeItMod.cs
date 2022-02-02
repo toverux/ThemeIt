@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Resources;
 using CitiesHarmony.API;
+using ICities;
 using ModsCommon;
 using ModsCommon.UI;
+using ThemeIt.Properties;
 
 namespace ThemeIt;
 
@@ -18,17 +22,23 @@ public sealed class ThemeItMod : BaseMod<ThemeItMod> {
 
     public override bool IsBeta => true;
 
-    public override string Description => "Create themes for growables and apply them to cities and districts.";
+    public override string Description => Localize.ThemeItMod_Description;
 
     protected override ulong StableWorkshopId => 0;
 
     protected override ulong BetaWorkshopId => 0;
+
+    protected override ResourceManager LocalizeManager => Localize.ResourceManager;
 
     private Patcher Patcher { get; }
 
     public ThemeItMod() {
         this.Patcher = new Patcher(this.IdRaw, this.Logger);
     }
+
+    protected override void SetCulture(CultureInfo culture) => Localize.Culture = culture;
+
+    protected override void GetSettings(UIHelperBase helper) => new Settings().OnSettingsUI(helper);
 
     protected override void Enable() {
         HarmonyHelper.DoOnHarmonyReady(() => {

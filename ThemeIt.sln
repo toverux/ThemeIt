@@ -100,5 +100,7 @@ Global
 		{04D146C6-FED3-4CD9-9F86-ADB0E8BDD598}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04D146C6-FED3-4CD9-9F86-ADB0E8BDD598}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04D146C6-FED3-4CD9-9F86-ADB0E8BDD598}.Release|Any CPU.Build.0 = Release|Any CPU
+		{965F863B-1394-41ED-85EC-B35DC09003EB}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{965F863B-1394-41ED-85EC-B35DC09003EB}.Debug|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,5 +1,6 @@
 ﻿using ColossalFramework.UI;
 using ModsCommon.UI;
+using ThemeIt.Properties;
 using UnityEngine;
 using ILogger = ModsCommon.ILogger;
 
@@ -49,7 +50,7 @@ internal sealed class ThemesTabManager {
         var spacing = policyContainer.relativePosition.x;
 
         //=> Add a custom tab.
-        var tab = tabstrip.AddTab("Themes");
+        var tab = tabstrip.AddTab(Localize.GUI_ThemesTabManager_TabTitle);
         tab.name = "ThemesStrip";
 
         //=> Set some properties to mimic these particular tab instance in the policies panel.
@@ -98,7 +99,7 @@ internal sealed class ThemesTabManager {
         //=> Add the Theme Manager button.
         var showManagerButton = UIUtils.CreateButton(pagePanel);
         showManagerButton.name = "ShowManagerButton";
-        showManagerButton.text = "Open Theme Manager";
+        showManagerButton.text = Localize.GUI_ThemesTabManager_OpenThemeManager;
         showManagerButton.width = pagePanel.width - spacing;
         showManagerButton.relativePosition = new Vector2(0, pagePanel.height - showManagerButton.height - spacing);
 
@@ -146,8 +147,8 @@ internal sealed class ThemesTabManager {
     internal void SetCurrentDistrict(byte districtId) {
         if (this.themeManagementCheckBox is not null) {
             this.themeManagementCheckBox.text = districtId == 0
-                ? "Enable Theme Management for this city"
-                : "Enable Theme Management for this district";
+                ? Localize.GUI_ThemesTabManager_EnableThemeManagementForCity
+                : Localize.GUI_ThemesTabManager_EnableThemeManagementForDistrict;
         }
     }
 
