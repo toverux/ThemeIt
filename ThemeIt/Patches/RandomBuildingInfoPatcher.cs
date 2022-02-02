@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using ColossalFramework.Math;
@@ -9,7 +8,7 @@ using UnityEngine;
 
 namespace ThemeIt.Patches;
 
-public static class RandomBuildingInfoPatcher {
+internal static class RandomBuildingInfoPatcher {
     private static readonly MethodInfo GetDistrictMethod = AccessTools.Method(
         typeof(DistrictManager),
         nameof(DistrictManager.GetDistrict),
@@ -33,7 +32,7 @@ public static class RandomBuildingInfoPatcher {
      * to derive new info from it (eg. a building configured to upgrade to a predetermined building, a feature that
      * Building Themes had).
      */
-    public static IEnumerable<CodeInstruction> TranspileGetRandomBuildingInfoConsumer(
+    internal static IEnumerable<CodeInstruction> TranspileGetRandomBuildingInfoConsumer(
         IEnumerable<CodeInstruction> enumerableInstructions) {
 
         var instructions = new List<CodeInstruction>(enumerableInstructions);

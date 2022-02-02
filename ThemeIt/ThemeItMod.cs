@@ -4,7 +4,7 @@ using CitiesHarmony.API;
 using ModsCommon;
 using ModsCommon.UI;
 
-namespace ThemeIt; 
+namespace ThemeIt;
 
 // ReSharper disable once UnusedType.Global
 public sealed class ThemeItMod : BaseMod<ThemeItMod> {
@@ -23,7 +23,7 @@ public sealed class ThemeItMod : BaseMod<ThemeItMod> {
     protected override ulong StableWorkshopId => 0;
 
     protected override ulong BetaWorkshopId => 0;
-        
+
     private Patcher Patcher { get; }
 
     public ThemeItMod() {

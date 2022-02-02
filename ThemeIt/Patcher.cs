@@ -4,7 +4,7 @@ using ModsCommon;
 
 namespace ThemeIt;
 
-public class Patcher {
+internal class Patcher {
     private ILogger Logger { get; }
 
     private Harmony Harmony { get; }
@@ -17,13 +17,13 @@ public class Patcher {
         Harmony.DEBUG = true;
         #endif
     }
-    
-    public Patcher(string id, ILogger logger) {
+
+    internal Patcher(string id, ILogger logger) {
         this.Logger = logger;
         this.Harmony = new Harmony(id);
     }
 
-    public void PatchAll() {
+    internal void PatchAll() {
         if (this.patchesWereApplied) {
             return;
         }
@@ -31,11 +31,11 @@ public class Patcher {
         this.Harmony.PatchAll(Assembly.GetExecutingAssembly());
 
         this.patchesWereApplied = true;
-        
+
         this.Logger.Debug("All Harmony patches were applied.");
     }
 
-    public void UnpatchAll() {
+    internal void UnpatchAll() {
         if (!this.patchesWereApplied) {
             return;
         }
@@ -43,7 +43,7 @@ public class Patcher {
         this.Harmony.UnpatchAll();
 
         this.patchesWereApplied = false;
-        
+
         this.Logger.Debug("All Harmony patches were removed.");
     }
 }

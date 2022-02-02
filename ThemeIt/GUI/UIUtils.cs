@@ -14,12 +14,12 @@ using UnityEngine;
 
 namespace ThemeIt.GUI;
 
-public static class UIUtils {
-    // From SamsamTS: 
+internal static class UIUtils {
+    // From SamsamTS:
     // Figuring all this was a pain (no documentation whatsoever)
     // So if your are using it for your mod consider thanking me (SamsamTS)
     // Extended Public Transport UI's code helped me a lot so thanks a lot AcidFire
-    public static UIButton CreateButton(UIComponent parent) {
+    internal static UIButton CreateButton(UIComponent parent) {
         UIButton button = (UIButton) parent.AddUIComponent<UIButton>();
 
         button.atlas = UIUtils.GetAtlas("Ingame");
@@ -36,7 +36,7 @@ public static class UIUtils {
         return button;
     }
 
-    public static UICheckBox CreateCheckBox(UIComponent parent) {
+    internal static UICheckBox CreateCheckBox(UIComponent parent) {
         UICheckBox checkBox = (UICheckBox) parent.AddUIComponent<UICheckBox>();
 
         checkBox.width = 300f;
@@ -63,7 +63,7 @@ public static class UIUtils {
         return checkBox;
     }
 
-    public static UITextField CreateTextField(UIComponent parent) {
+    internal static UITextField CreateTextField(UIComponent parent) {
         UITextField textField = parent.AddUIComponent<UITextField>();
 
         textField.atlas = UIUtils.GetAtlas("Ingame");
@@ -84,7 +84,7 @@ public static class UIUtils {
         return textField;
     }
 
-    public static UIDropDown CreateDropDown(UIComponent parent) {
+    internal static UIDropDown CreateDropDown(UIComponent parent) {
         UIDropDown dropDown = parent.AddUIComponent<UIDropDown>();
 
         dropDown.atlas = UIUtils.GetAtlas("Ingame");
@@ -136,7 +136,7 @@ public static class UIUtils {
         return dropDown;
     }
 
-    public static void CreateDropDownScrollBar(UIDropDown dropDown) {
+    internal static void CreateDropDownScrollBar(UIDropDown dropDown) {
         // Scrollbar
         dropDown.listScrollbar = dropDown.AddUIComponent<UIScrollbar>();
         dropDown.listScrollbar.width = 20f;
@@ -177,14 +177,14 @@ public static class UIUtils {
         dropDown.listScrollbar.transform.localScale = dropDown.transform.localScale;
     }
 
-    public static void DestroyDropDownScrollBar(UIDropDown dropDown) {
+    internal static void DestroyDropDownScrollBar(UIDropDown dropDown) {
         UIScrollbar[] scrollbars = dropDown.GetComponentsInChildren<UIScrollbar>();
         foreach (UIScrollbar scrollbar in scrollbars) {
             UnityEngine.GameObject.DestroyImmediate(scrollbar.gameObject);
         }
     }
 
-    public static UICheckBox CreateIconToggle(UIComponent parent, string atlas, string checkedSprite,
+    internal static UICheckBox CreateIconToggle(UIComponent parent, string atlas, string checkedSprite,
         string uncheckedSprite, float disabledSpriteOpacity = 1.0f, float tabSize = 35f) {
         UICheckBox checkBox = parent.AddUIComponent<UICheckBox>();
         disabledSpriteOpacity = 0.3f;
@@ -249,7 +249,7 @@ public static class UIUtils {
 
     private static UIColorField _colorFIeldTemplate;
 
-    public static UIColorField CreateColorField(UIComponent parent) {
+    internal static UIColorField CreateColorField(UIComponent parent) {
         // Creating a ColorField from scratch is tricky. Cloning an existing one instead.
 
         if (UIUtils._colorFIeldTemplate == null) {
@@ -272,7 +272,7 @@ public static class UIUtils {
         return colorField;
     }
 
-    public static void ResizeIcon(UISprite icon, Vector2 maxSize) {
+    internal static void ResizeIcon(UISprite icon, Vector2 maxSize) {
         icon.width = icon.spriteInfo.width;
         icon.height = icon.spriteInfo.height;
 
@@ -293,7 +293,7 @@ public static class UIUtils {
 
     private static Dictionary<string, UITextureAtlas> _atlases;
 
-    public static UITextureAtlas GetAtlas(string name) {
+    internal static UITextureAtlas GetAtlas(string name) {
         if (UIUtils._atlases == null || !UIUtils._atlases.ContainsKey(name)) {
             UIUtils._atlases = new Dictionary<string, UITextureAtlas>();
 
