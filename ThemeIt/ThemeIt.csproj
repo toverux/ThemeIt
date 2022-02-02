@@ -64,7 +64,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="GUI\ThemesTabBuilder.cs" />
+        <Compile Include="GUI\ThemesTabManager.cs" />
         <Compile Include="Patcher.cs" />
         <Compile Include="Patches\PoliciesPanelPatches.cs" />
         <Compile Include="Patches\PrivateBuildingAIPatches.cs" />

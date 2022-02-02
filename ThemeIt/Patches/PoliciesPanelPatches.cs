@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using ColossalFramework.UI;
 using HarmonyLib;
 using JetBrains.Annotations;
+using ModsCommon;
 using ThemeIt.GUI;
 
 namespace ThemeIt.Patches;
@@ -15,10 +16,14 @@ internal static class PoliciesPanelPatches {
         typeof(UITabstrip),
         nameof(UITabstrip.tabCount));
 
+    private static ThemesTabManager? currentThemesTabManager;
+
     [HarmonyPostfix, UsedImplicitly]
     [HarmonyPatch("Awake")]
     internal static void PostfixAwake(PoliciesPanel __instance) {
-        ThemesTabBuilder.SetupThemesTab(__instance);
+        var logger = SingletonItem<ThemeItMod>.Instance.Logger;
+
+        PoliciesPanelPatches.currentThemesTabManager = new ThemesTabManager(logger, __instance);
     }
 
     /**
@@ -71,6 +76,7 @@ internal static class PoliciesPanelPatches {
     [HarmonyPostfix, UsedImplicitly]
     [HarmonyPatch(nameof(PoliciesPanel.Set), typeof(byte))]
     internal static void PostfixSet(byte district) {
-        ThemesTabBuilder.SetCurrentDistrict(district);
+        // Update "Themes" tab UI
+        PoliciesPanelPatches.currentThemesTabManager?.SetCurrentDistrict(district);
     }
 }

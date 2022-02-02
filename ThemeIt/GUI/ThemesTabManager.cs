@@ -1,45 +1,49 @@
 ﻿using ColossalFramework.UI;
-using ModsCommon;
 using ModsCommon.UI;
 using UnityEngine;
 using ILogger = ModsCommon.ILogger;
 
 namespace ThemeIt.GUI;
 
-internal static class ThemesTabBuilder {
-    private static ILogger Logger => SingletonMod<ThemeItMod>.Logger;
+/**
+ * Responsible of the "Themes" tab on the Policies panel from the game.
+ */
+internal sealed class ThemesTabManager {
+    private readonly ILogger logger;
 
-    private static UITabstrip? FindTabstrip(this UICustomControl panel) =>
-        panel.Find<UITabstrip>("Tabstrip");
+    private readonly PoliciesPanel policiesPanel;
 
-    private static UIScrollbar? FindScrollbar(this UICustomControl panel) =>
-        panel.Find<UIScrollbar>("Scrollbar");
+    private readonly UICheckBox? themeManagementCheckBox;
 
-    private static UITabContainer? FindPolicyContainer(this UICustomControl panel) =>
-        panel.Find<UITabContainer>("PolicyContainer");
+    private readonly float originalPolicyContainerWidth;
 
-    private static PoliciesPanel? currentInstance;
+    private UITabstrip? FindTabstrip() => this.policiesPanel.Find<UITabstrip>("Tabstrip");
 
-    private static UICheckBox? currentThemeManagementCheckBox;
+    private UIScrollbar? FindScrollbar() => this.policiesPanel.Find<UIScrollbar>("Scrollbar");
 
-    private static float originalPolicyContainerWidth;
+    private UITabContainer? FindPolicyContainer() => this.policiesPanel.Find<UITabContainer>("PolicyContainer");
 
-    internal static void SetupThemesTab(PoliciesPanel policiesPanel) {
-        var tabstrip = policiesPanel.FindTabstrip();
-        var scrollbar = policiesPanel.FindScrollbar();
-        var policyContainer = policiesPanel.FindPolicyContainer();
+    /**
+     * Installs the mod tab on the panel from the game.
+     */
+    internal ThemesTabManager(ILogger logger, PoliciesPanel policiesPanel) {
+        this.logger = logger;
+        this.policiesPanel = policiesPanel;
+
+        var tabstrip = this.FindTabstrip();
+        var scrollbar = this.FindScrollbar();
+        var policyContainer = this.FindPolicyContainer();
 
         if (policyContainer is null || tabstrip is null) {
-            ThemesTabBuilder.Logger.Error("Cannot find PolicyContainer or Tabstrip, not updating Policies tabs.");
+            this.logger.Error("Cannot find PolicyContainer or Tabstrip, not updating Policies tabs.");
             return;
         }
 
         if (scrollbar is null) {
-            ThemesTabBuilder.Logger.Error("Cannot find PoliciesPanel scrollbar, Themes tab may be broken.");
+            this.logger.Error("Cannot find PoliciesPanel scrollbar, Themes tab may be broken.");
         }
 
-        ThemesTabBuilder.currentInstance = policiesPanel;
-        ThemesTabBuilder.originalPolicyContainerWidth = policyContainer.width;
+        this.originalPolicyContainerWidth = policyContainer.width;
 
         //=> A margin to apply on the container block and between elements, based on what the game uses in that panel.
         var spacing = policyContainer.relativePosition.x;
@@ -57,7 +61,7 @@ internal static class ThemesTabBuilder {
 
         //=> Listen for tab activation events, to change/restore the container width based on the tab kind.
         //   It should not be necessary to remove the listener on this instance (destroyed together).
-        tabstrip.eventSelectedIndexChanged += ThemesTabBuilder.OnTabStripSelectedIndexChanged;
+        tabstrip.eventSelectedIndexChanged += this.OnTabStripSelectedIndexChanged;
 
         //=> Initialize tab contents.
         // The container for the policies was created by the game when we added the tab.
@@ -77,17 +81,18 @@ internal static class ThemesTabBuilder {
 
         //=> Layout from top to bottom.
         //=> Add checkbox for theme management activation on city/district.
-        var themeManagementCheckBox = UIUtils.CreateCheckBox(pagePanel);
-        themeManagementCheckBox.relativePosition = new Vector2(0, spacing);
-        themeManagementCheckBox.name = "ThemeManagementCheckbox";
-        themeManagementCheckBox.width = pagePanel.width - spacing;
-
-        ThemesTabBuilder.currentThemeManagementCheckBox = themeManagementCheckBox;
+        this.themeManagementCheckBox = UIUtils.CreateCheckBox(pagePanel);
+        this.themeManagementCheckBox.relativePosition = new Vector2(0, spacing);
+        this.themeManagementCheckBox.name = "ThemeManagementCheckbox";
+        this.themeManagementCheckBox.width = pagePanel.width - spacing;
 
         //=> Add a spacer
         var spacer1 = AddSpacer(pagePanel);
-        spacer1.relativePosition =
-            new Vector2(0, themeManagementCheckBox.relativePosition.y + themeManagementCheckBox.size.y + spacing);
+        spacer1.relativePosition = new Vector2(
+            0,
+            this.themeManagementCheckBox.relativePosition.y
+            + this.themeManagementCheckBox.size.y
+            + spacing);
 
         //=> Layout from bottom to top.
         //=> Add the Theme Manager button.
@@ -135,25 +140,29 @@ internal static class ThemesTabBuilder {
         }
     }
 
-    internal static void SetCurrentDistrict(byte districtId) {
-        if (ThemesTabBuilder.currentThemeManagementCheckBox is not null) {
-            ThemesTabBuilder.currentThemeManagementCheckBox.text = districtId == 0
+    /**
+     * Updates the UI state for the currently selected district. District 0 is the city.
+     */
+    internal void SetCurrentDistrict(byte districtId) {
+        if (this.themeManagementCheckBox is not null) {
+            this.themeManagementCheckBox.text = districtId == 0
                 ? "Enable Theme Management for this city"
                 : "Enable Theme Management for this district";
         }
     }
 
-    private static void OnTabStripSelectedIndexChanged(UIComponent component, int tabIndex) {
-        if (ThemesTabBuilder.currentInstance is null) {
-            return;
-        }
-
-        var tabStrip = ThemesTabBuilder.currentInstance.FindTabstrip();
-        var scrollbar = ThemesTabBuilder.currentInstance.FindScrollbar();
-        var policyContainer = ThemesTabBuilder.currentInstance.FindPolicyContainer();
+    /**
+     * Tab-switching handler for patching the tabs container based on the currently-shown tab.
+     * Our "Themes" tab does not use the scrollbar from the Policies panel, so we have to hide it then change the size
+     * of the container when the Themes tab is displayed.
+     */
+    private void OnTabStripSelectedIndexChanged(UIComponent component, int tabIndex) {
+        var tabStrip = this.FindTabstrip();
+        var scrollbar = this.FindScrollbar();
+        var policyContainer = this.FindPolicyContainer();
 
         if (tabStrip is null || scrollbar is null || policyContainer is null) {
-            ThemesTabBuilder.Logger.Error("Unknown layout state, not updating Policies panel tabs.");
+            this.logger.Error("Unknown layout state, not updating Policies panel tabs.");
             return;
         }
 
@@ -162,10 +171,10 @@ internal static class ThemesTabBuilder {
         scrollbar.enabled = !isThemesTab;
 
         if (isThemesTab) {
-            policyContainer.width = ThemesTabBuilder.originalPolicyContainerWidth + scrollbar.width;
+            policyContainer.width = this.originalPolicyContainerWidth + scrollbar.width;
         }
         else {
-            policyContainer.width = ThemesTabBuilder.originalPolicyContainerWidth;
+            policyContainer.width = this.originalPolicyContainerWidth;
         }
     }
 }
