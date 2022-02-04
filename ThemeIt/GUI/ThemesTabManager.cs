@@ -82,44 +82,50 @@ internal sealed class ThemesTabManager {
 
         //=> Layout from top to bottom.
         //=> Add checkbox for theme management activation on city/district.
-        this.themeManagementCheckBox = UIUtils.CreateCheckBox(pagePanel);
-        this.themeManagementCheckBox.relativePosition = new Vector2(0, spacing);
-        this.themeManagementCheckBox.name = "ThemeManagementCheckbox";
-        this.themeManagementCheckBox.width = pagePanel.width - spacing;
+        this.themeManagementCheckBox = pagePanel.AddUICheckBox(new ExUi.CheckBoxOptions {
+            Name = "ThemeManagementCheckbox",
+            Width = parent => parent.width - spacing,
+            RelativePosition = (_, _) => new Vector2(0, spacing * 2)
+        });
 
         //=> Add a spacer
-        var spacer1 = AddSpacer(pagePanel);
-        spacer1.relativePosition = new Vector2(
-            0,
-            this.themeManagementCheckBox.relativePosition.y
-            + this.themeManagementCheckBox.size.y
-            + spacing);
+        var spacer1 = pagePanel.AddUIHorizontalRule(new ExUi.HorizontalRuleOptions {
+            Width = parent => parent.width - spacing,
+            RelativePosition = (_, _) => this.themeManagementCheckBox.GetPositionUnder(spacing * 2)
+        });
 
         //=> Layout from bottom to top.
         //=> Add the Theme Manager button.
-        var showManagerButton = UIUtils.CreateButton(pagePanel);
-        showManagerButton.name = "ShowManagerButton";
-        showManagerButton.text = Localize.GUI_ThemesTabManager_OpenThemeManager;
-        showManagerButton.width = pagePanel.width - spacing;
-        showManagerButton.relativePosition = new Vector2(0, pagePanel.height - showManagerButton.height - spacing);
+        var showManagerButton = pagePanel.AddUIButton(new ExUi.ButtonOptions {
+            Name = "ShowManagerButton",
+            Text = Localize.GUI_ThemesTabManager_OpenThemeManager,
+            Width = parent => parent.width - spacing,
+            Height = _ => 45,
+            RelativePosition = (parent, self) => new Vector2(0, parent.height - self.height - spacing)
+        });
 
         //=> Add a spacer
-        var spacer2 = AddSpacer(pagePanel);
-        spacer2.relativePosition = new Vector2(0, showManagerButton.relativePosition.y - spacer2.height - spacing);
+        var spacer2 = pagePanel.AddUIHorizontalRule(new ExUi.HorizontalRuleOptions {
+            Width = parent => parent.width - spacing,
+            RelativePosition = (_, self) => showManagerButton.GetPositionAboveFor(self, spacing)
+        });
 
         //=> Insert between top- and bottom-docked elements.
         //=> Add a scrollable panel -- the other tabs have one as their main tab page view, we don't (got a UIPanel).
         //   Anyway our page in not structured the same, we have static elements, and the scroll panel in the middle.
         //   We could attach the scrollbar from the parent as this scrollbar is shared between all tabs, but 1) it
         //   appears to be buggy (stack overflow, no mouse wheel...) and 2) it's not really prettier...
-        var themesPanel = pagePanel.AddUIComponent<AdvancedScrollablePanel>();
-        themesPanel.name = "ThemesPanel";
-        themesPanel.width = pagePanel.width;
-        themesPanel.relativePosition = new Vector2(0, spacer1.relativePosition.y + spacer1.height);
-        themesPanel.height = spacer2.relativePosition.y - (spacer1.relativePosition.y + spacer1.height);
+        var themesPanel = pagePanel.AddUIComponent<AdvancedScrollablePanel>(new ExUi.UIComponentOptions {
+            Name = "ThemesPanel",
+            Width = parent => parent.width,
+            Height = _ => spacer2.relativePosition.y - (spacer1.relativePosition.y + spacer1.height),
+            RelativePosition = (_, _) => spacer1.GetPositionUnder()
+        });
 
         themesPanel.Content.autoLayout = true;
         themesPanel.Content.autoLayoutDirection = LayoutDirection.Vertical;
+
+        //=> Mimic original scrollbar of policies panel
         if (scrollbar is not null) {
             themesPanel.Content.verticalScrollbar.width = scrollbar.width;
         }
@@ -128,16 +134,6 @@ internal sealed class ThemesTabManager {
         for (var index = 0; index < 50; index++) {
             var label = themesPanel.Content.AddUIComponent<UILabel>();
             label.text = index.ToString();
-        }
-
-        UIPanel AddSpacer(UIComponent parent) {
-            var spacer = parent.AddUIComponent<UIPanel>();
-
-            spacer.width = parent.width - spacing;
-            spacer.height = 8;
-            spacer.backgroundSprite = "ContentManagerItemBackground";
-
-            return spacer;
         }
     }
 
