@@ -26,4 +26,7 @@
     <data name="GUI_ThemesTabManager_TabTitle" xml:space="preserve">
         <value>Thèmes</value>
     </data>
+    <data name="GUI_DistrictInfoPanelManager_Themes" xml:space="preserve">
+        <value>Thèmes</value>
+    </data>
 </root>

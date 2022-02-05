@@ -14,9 +14,11 @@ internal sealed class ThemesTabManager {
 
     private readonly PoliciesPanel policiesPanel;
 
-    private readonly UICheckBox? themeManagementCheckBox;
+    private int tabIndex;
 
-    private readonly float originalPolicyContainerWidth;
+    private UICheckBox? themeManagementCheckBox;
+
+    private float originalPolicyContainerWidth;
 
     private UITabstrip? FindTabstrip() => this.policiesPanel.Find<UITabstrip>("Tabstrip");
 
@@ -24,13 +26,15 @@ internal sealed class ThemesTabManager {
 
     private UITabContainer? FindPolicyContainer() => this.policiesPanel.Find<UITabContainer>("PolicyContainer");
 
-    /**
-     * Installs the mod tab on the panel from the game.
-     */
     internal ThemesTabManager(ILogger logger, PoliciesPanel policiesPanel) {
         this.logger = logger;
         this.policiesPanel = policiesPanel;
+    }
 
+    /**
+     * Installs the Themes tab on the panel from the game.
+     */
+    internal void Install() {
         var tabstrip = this.FindTabstrip();
         var scrollbar = this.FindScrollbar();
         var policyContainer = this.FindPolicyContainer();
@@ -66,37 +70,39 @@ internal sealed class ThemesTabManager {
 
         //=> Initialize tab contents.
         // The container for the policies was created by the game when we added the tab.
-        var tabPanel = tabstrip.tabPages.childCount - 1;
-        var pagePanel = (UIPanel) tabstrip.tabPages.components[tabPanel];
+        this.tabIndex = tabstrip.tabPages.childCount - 1;
+
+        var tabPanel = (UIPanel) tabstrip.tabPages.components[this.tabIndex];
+        tabPanel.name = "Themes";
 
         //=> Only make the tab visible if our tab was selected when the panel was closed last time.
-        pagePanel.isVisible = tabstrip.selectedIndex == tabPanel;
+        tabPanel.isVisible = tabstrip.selectedIndex == this.tabIndex;
 
         //=> Eat the space of the unused and disabled scrollbar that only the other tabs use.
         //   We need to change the size of the container so the child can be expanded, otherwise the width is clamped.
         //   But when switching tabs, the container's width will be changed/restored, according to the tab kind.
         if (scrollbar is not null) {
             policyContainer.width += scrollbar.width;
-            pagePanel.width += scrollbar.width;
+            tabPanel.width += scrollbar.width;
         }
 
         //=> Layout from top to bottom.
         //=> Add checkbox for theme management activation on city/district.
-        this.themeManagementCheckBox = pagePanel.AddUICheckBox(new ExUi.CheckBoxOptions {
+        this.themeManagementCheckBox = tabPanel.AddUICheckBox(new ExUi.CheckBoxOptions {
             Name = "ThemeManagementCheckbox",
             Width = parent => parent.width - spacing,
             RelativePosition = (_, _) => new Vector2(0, spacing * 2)
         });
 
         //=> Add a spacer
-        var spacer1 = pagePanel.AddUIHorizontalRule(new ExUi.HorizontalRuleOptions {
+        var spacer1 = tabPanel.AddUIHorizontalRule(new ExUi.HorizontalRuleOptions {
             Width = parent => parent.width - spacing,
             RelativePosition = (_, _) => this.themeManagementCheckBox.GetPositionUnder(spacing * 2)
         });
 
         //=> Layout from bottom to top.
         //=> Add the Theme Manager button.
-        var showManagerButton = pagePanel.AddUIButton(new ExUi.ButtonOptions {
+        var showManagerButton = tabPanel.AddUIButton(new ExUi.ButtonOptions {
             Name = "ShowManagerButton",
             Text = Localize.GUI_ThemesTabManager_OpenThemeManager,
             Width = parent => parent.width - spacing,
@@ -105,7 +111,7 @@ internal sealed class ThemesTabManager {
         });
 
         //=> Add a spacer
-        var spacer2 = pagePanel.AddUIHorizontalRule(new ExUi.HorizontalRuleOptions {
+        var spacer2 = tabPanel.AddUIHorizontalRule(new ExUi.HorizontalRuleOptions {
             Width = parent => parent.width - spacing,
             RelativePosition = (_, self) => showManagerButton.GetPositionAboveFor(self, spacing)
         });
@@ -115,7 +121,7 @@ internal sealed class ThemesTabManager {
         //   Anyway our page in not structured the same, we have static elements, and the scroll panel in the middle.
         //   We could attach the scrollbar from the parent as this scrollbar is shared between all tabs, but 1) it
         //   appears to be buggy (stack overflow, no mouse wheel...) and 2) it's not really prettier...
-        var themesPanel = pagePanel.AddUIComponent<AdvancedScrollablePanel>(new ExUi.UIComponentOptions {
+        var themesPanel = tabPanel.AddUIComponent<AdvancedScrollablePanel>(new ExUi.UIComponentOptions {
             Name = "ThemesPanel",
             Width = parent => parent.width,
             Height = _ => spacer2.relativePosition.y - (spacer1.relativePosition.y + spacer1.height),
@@ -149,11 +155,34 @@ internal sealed class ThemesTabManager {
     }
 
     /**
+     * Focus teh default policies panel tab.
+     */
+    internal void FocusDefaultTab() => this.FocusTabByIndex(0);
+
+    /**
+     * Focus our custom policies panel tab.
+     */
+    internal void FocusThemesTab()  => this.FocusTabByIndex(this.tabIndex);
+
+    /**
+     * Focus a policies panel tab found by index.
+     */
+    private void FocusTabByIndex(int index) {
+        var tabstrip = this.FindTabstrip();
+        if (tabstrip is null) {
+            this.logger.Error($"Cannot focus policies tab #{index}, tab controller was not found.");
+            return;
+        }
+
+        tabstrip.selectedIndex = index;
+    }
+
+    /**
      * Tab-switching handler for patching the tabs container based on the currently-shown tab.
      * Our "Themes" tab does not use the scrollbar from the Policies panel, so we have to hide it then change the size
      * of the container when the Themes tab is displayed.
      */
-    private void OnTabStripSelectedIndexChanged(UIComponent component, int tabIndex) {
+    private void OnTabStripSelectedIndexChanged(UIComponent component, int selectedTabIndex) {
         var tabStrip = this.FindTabstrip();
         var scrollbar = this.FindScrollbar();
         var policyContainer = this.FindPolicyContainer();
@@ -163,7 +192,7 @@ internal sealed class ThemesTabManager {
             return;
         }
 
-        var isThemesTab = tabIndex == tabStrip.tabPages.childCount - 1;
+        var isThemesTab = selectedTabIndex == tabStrip.tabPages.childCount - 1;
 
         scrollbar.enabled = !isThemesTab;
 

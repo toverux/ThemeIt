@@ -4,8 +4,7 @@ using JetBrains.Annotations;
 
 namespace ThemeIt.Patches;
 
-[HarmonyPatch(typeof(PrivateBuildingAI)), UsedImplicitly]
-// ReSharper disable once InconsistentNaming
+[HarmonyPatch(typeof(PrivateBuildingAI))]
 internal static class PrivateBuildingAIPatches {
     [HarmonyTranspiler, UsedImplicitly]
     [HarmonyPatch(

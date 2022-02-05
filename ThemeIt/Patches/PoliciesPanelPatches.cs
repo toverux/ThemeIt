@@ -5,25 +5,26 @@ using System.Reflection.Emit;
 using ColossalFramework.UI;
 using HarmonyLib;
 using JetBrains.Annotations;
-using ModsCommon;
 using ThemeIt.GUI;
 
 namespace ThemeIt.Patches;
 
-[HarmonyPatch(typeof(PoliciesPanel)), UsedImplicitly]
+[HarmonyPatch(typeof(PoliciesPanel))]
 internal static class PoliciesPanelPatches {
     private static readonly MethodInfo UiTabStripTabCountMethod = AccessTools.PropertyGetter(
         typeof(UITabstrip),
         nameof(UITabstrip.tabCount));
 
-    private static ThemesTabManager? currentThemesTabManager;
-
     [HarmonyPostfix, UsedImplicitly]
     [HarmonyPatch("Awake")]
     internal static void PostfixAwake(PoliciesPanel __instance) {
-        var logger = SingletonItem<ThemeItMod>.Instance.Logger;
+        var logger = Locator.Current.Find<ThemeItMod>().Logger;
 
-        PoliciesPanelPatches.currentThemesTabManager = new ThemesTabManager(logger, __instance);
+        var themesTabManager = new ThemesTabManager(logger, __instance);
+
+        themesTabManager.Install();
+
+        Locator.Current.Register(themesTabManager);
     }
 
     /**
@@ -77,6 +78,6 @@ internal static class PoliciesPanelPatches {
     [HarmonyPatch(nameof(PoliciesPanel.Set), typeof(byte))]
     internal static void PostfixSet(byte district) {
         // Update "Themes" tab UI
-        PoliciesPanelPatches.currentThemesTabManager?.SetCurrentDistrict(district);
+        Locator.Current.TryFind<ThemesTabManager>()?.SetCurrentDistrict(district);
     }
 }

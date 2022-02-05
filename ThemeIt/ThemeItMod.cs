@@ -34,6 +34,8 @@ public sealed class ThemeItMod : BaseMod<ThemeItMod> {
 
     public ThemeItMod() {
         this.Patcher = new Patcher(this.IdRaw, this.Logger);
+
+        Locator.Current.Register(this);
     }
 
     protected override void SetCulture(CultureInfo culture) => Localize.Culture = culture;

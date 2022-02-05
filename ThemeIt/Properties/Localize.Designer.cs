@@ -61,6 +61,15 @@ namespace ThemeIt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Themes.
+        /// </summary>
+        internal static string GUI_DistrictInfoPanelManager_Themes {
+            get {
+                return ResourceManager.GetString("GUI_DistrictInfoPanelManager_Themes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable Theme Management for this city.
         /// </summary>
         internal static string GUI_ThemesTabManager_EnableThemeManagementForCity {

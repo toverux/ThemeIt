@@ -27,14 +27,32 @@ namespace ThemeIt.GUI;
  * Many thanks to them!
  */
 internal static class ExUi {
+    internal static Vector3 GetPositionAfter(this UIComponent componentBefore, float spacing = 0, float offsetY = 0) {
+        return new Vector3(
+            componentBefore.relativePosition.x + componentBefore.size.x + spacing,
+            componentBefore.relativePosition.y + offsetY);
+    }
+
+    internal static Vector3 GetPositionBeforeFor(
+        this UIComponent componentAfter, UIComponent componentBefore, float spacing = 0, float offsetY = 0) {
+
+        return new Vector3(
+            componentAfter.relativePosition.x - componentBefore.size.x - spacing,
+            componentAfter.relativePosition.y + offsetY);
+    }
+
     internal static Vector3 GetPositionUnder(this UIComponent componentAbove, float spacing = 0, float offsetX = 0) {
-        return new Vector3(offsetX, componentAbove.relativePosition.y + componentAbove.size.y + spacing);
+        return new Vector3(
+            componentAbove.relativePosition.x + offsetX,
+            componentAbove.relativePosition.y + componentAbove.size.y + spacing);
     }
 
     internal static Vector3 GetPositionAboveFor(
         this UIComponent componentUnder, UIComponent componentAbove, float spacing = 0, float offsetX = 0) {
 
-        return new Vector3(offsetX, componentUnder.relativePosition.y - componentAbove.height - spacing);
+        return new Vector3(
+            componentUnder.relativePosition.x + offsetX,
+            componentUnder.relativePosition.y - componentAbove.size.y - spacing);
     }
 
     internal static TComponent AddUIComponent<TComponent>(
@@ -77,7 +95,7 @@ internal static class ExUi {
         return checkBox;
     }
 
-    public static UIButton AddUIButton(this UIComponent parent, ButtonOptions? options = null) {
+    internal static UIButton AddUIButton(this UIComponent parent, ButtonOptions? options = null) {
         options ??= new ButtonOptions();
 
         var button = parent.AddUIComponent<UIButton>();
@@ -90,6 +108,7 @@ internal static class ExUi {
         button.disabledBgSprite = "ButtonMenuDisabled";
         button.disabledTextColor = new Color32(128, 128, 128, 255);
         button.canFocus = false;
+        button.playAudioEvents = true;
 
         button.textVerticalAlignment = UIVerticalAlignment.Middle;
         button.textHorizontalAlignment = UIHorizontalAlignment.Center;
@@ -98,7 +117,7 @@ internal static class ExUi {
         return button;
     }
 
-    public static UIPanel AddUIHorizontalRule(this UIComponent parent, HorizontalRuleOptions? options = null) {
+    internal static UIPanel AddUIHorizontalRule(this UIComponent parent, HorizontalRuleOptions? options = null) {
         options ??= new HorizontalRuleOptions();
 
         var rule = parent.AddUIComponent<UIHorizontalRule>();
