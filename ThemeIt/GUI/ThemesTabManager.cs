@@ -14,6 +14,8 @@ internal sealed class ThemesTabManager {
 
     private readonly PoliciesPanel policiesPanel;
 
+    private readonly ThemesManagerManager themesManagerManager;
+
     private int tabIndex;
 
     private UICheckBox? themeManagementCheckBox;
@@ -26,9 +28,10 @@ internal sealed class ThemesTabManager {
 
     private UITabContainer? FindPolicyContainer() => this.policiesPanel.Find<UITabContainer>("PolicyContainer");
 
-    internal ThemesTabManager(ILogger logger, PoliciesPanel policiesPanel) {
+    internal ThemesTabManager(ILogger logger, PoliciesPanel policiesPanel, ThemesManagerManager themesManagerManager) {
         this.logger = logger;
         this.policiesPanel = policiesPanel;
+        this.themesManagerManager = themesManagerManager;
     }
 
     /**
@@ -109,6 +112,8 @@ internal sealed class ThemesTabManager {
             Height = _ => 45,
             RelativePosition = (parent, self) => new Vector2(0, parent.height - self.height - spacing)
         });
+
+        showManagerButton.eventClicked += (_, _) => this.themesManagerManager.Open();
 
         //=> Add a spacer
         var spacer2 = tabPanel.AddUIHorizontalRule(new ExUi.HorizontalRuleOptions {

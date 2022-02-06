@@ -20,7 +20,9 @@ internal static class PoliciesPanelPatches {
     internal static void PostfixAwake(PoliciesPanel __instance) {
         var logger = Locator.Current.Find<ThemeItMod>().Logger;
 
-        var themesTabManager = new ThemesTabManager(logger, __instance);
+        var themesManagerManager = Locator.Current.Find<ThemesManagerManager>();
+
+        var themesTabManager = new ThemesTabManager(logger, __instance, themesManagerManager);
 
         themesTabManager.Install();
 

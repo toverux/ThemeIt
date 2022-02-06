@@ -65,6 +65,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="GUI\DistrictInfoPanelManager.cs" />
+        <Compile Include="GUI\ThemesManagerManager.cs" />
+        <Compile Include="GUI\UIThemesManagerPanel.cs" />
         <Compile Include="GUI\ThemesTabManager.cs" />
         <Compile Include="Locator.cs" />
         <Compile Include="Patcher.cs" />

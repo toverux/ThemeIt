@@ -6,6 +6,7 @@ using CitiesHarmony.API;
 using ICities;
 using ModsCommon;
 using ModsCommon.UI;
+using ThemeIt.GUI;
 using ThemeIt.Properties;
 
 namespace ThemeIt;
@@ -36,6 +37,7 @@ public sealed class ThemeItMod : BaseMod<ThemeItMod> {
         this.Patcher = new Patcher(this.IdRaw, this.Logger);
 
         Locator.Current.Register(this);
+        Locator.Current.Register(new ThemesManagerManager());
     }
 
     protected override void SetCulture(CultureInfo culture) => Localize.Culture = culture;
