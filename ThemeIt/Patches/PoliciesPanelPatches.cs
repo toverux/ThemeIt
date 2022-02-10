@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using ColossalFramework.UI;
 using HarmonyLib;
 using JetBrains.Annotations;
+using ModsCommon;
 using ThemeIt.GUI;
 
 namespace ThemeIt.Patches;
@@ -18,15 +19,9 @@ internal static class PoliciesPanelPatches {
     [HarmonyPostfix, UsedImplicitly]
     [HarmonyPatch("Awake")]
     internal static void PostfixAwake(PoliciesPanel __instance) {
-        var logger = Locator.Current.Find<ThemeItMod>().Logger;
+        var locator = SingletonItem<ThemeItMod>.Instance.Locator;
 
-        var themesManagerManager = Locator.Current.Find<ThemesManagerManager>();
-
-        var themesTabManager = new ThemesTabManager(logger, __instance, themesManagerManager);
-
-        themesTabManager.Install();
-
-        Locator.Current.Register(themesTabManager);
+        locator.Find<ThemesTabManager>().Install(__instance);
     }
 
     /**
@@ -76,10 +71,16 @@ internal static class PoliciesPanelPatches {
         }
     }
 
+    /**
+     * Called when the scope (city or district) of the Policies tab changes.
+     * We hijack it to update the Themes tab panel info.
+     */
     [HarmonyPostfix, UsedImplicitly]
     [HarmonyPatch(nameof(PoliciesPanel.Set), typeof(byte))]
     internal static void PostfixSet(byte district) {
-        // Update "Themes" tab UI
-        Locator.Current.TryFind<ThemesTabManager>()?.SetCurrentDistrict(district);
+        var locator = SingletonItem<ThemeItMod>.Instance.Locator;
+
+        //=> Update "Themes" tab UI
+        locator.TryFind<ThemesTabManager>()?.SetCurrentDistrict(district);
     }
 }

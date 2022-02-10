@@ -12,9 +12,9 @@ namespace ThemeIt.GUI;
 internal sealed class ThemesTabManager {
     private readonly ILogger logger;
 
-    private readonly PoliciesPanel policiesPanel;
-
     private readonly ThemesManagerManager themesManagerManager;
+
+    private PoliciesPanel? policiesPanel;
 
     private int tabIndex;
 
@@ -22,22 +22,23 @@ internal sealed class ThemesTabManager {
 
     private float originalPolicyContainerWidth;
 
-    private UITabstrip? FindTabstrip() => this.policiesPanel.Find<UITabstrip>("Tabstrip");
+    private UITabstrip? FindTabstrip() => this.policiesPanel?.Find<UITabstrip>("Tabstrip");
 
-    private UIScrollbar? FindScrollbar() => this.policiesPanel.Find<UIScrollbar>("Scrollbar");
+    private UIScrollbar? FindScrollbar() => this.policiesPanel?.Find<UIScrollbar>("Scrollbar");
 
-    private UITabContainer? FindPolicyContainer() => this.policiesPanel.Find<UITabContainer>("PolicyContainer");
+    private UITabContainer? FindPolicyContainer() => this.policiesPanel?.Find<UITabContainer>("PolicyContainer");
 
-    internal ThemesTabManager(ILogger logger, PoliciesPanel policiesPanel, ThemesManagerManager themesManagerManager) {
+    internal ThemesTabManager(ILogger logger, ThemesManagerManager themesManagerManager) {
         this.logger = logger;
-        this.policiesPanel = policiesPanel;
         this.themesManagerManager = themesManagerManager;
     }
 
     /**
      * Installs the Themes tab on the panel from the game.
      */
-    internal void Install() {
+    internal void Install(PoliciesPanel panel) {
+        this.policiesPanel = panel;
+
         var tabstrip = this.FindTabstrip();
         var scrollbar = this.FindScrollbar();
         var policyContainer = this.FindPolicyContainer();
@@ -160,17 +161,17 @@ internal sealed class ThemesTabManager {
     }
 
     /**
-     * Focus teh default policies panel tab.
+     * Focuses default policies panel tab.
      */
     internal void FocusDefaultTab() => this.FocusTabByIndex(0);
 
     /**
-     * Focus our custom policies panel tab.
+     * Focuses our custom policies panel tab.
      */
     internal void FocusThemesTab()  => this.FocusTabByIndex(this.tabIndex);
 
     /**
-     * Focus a policies panel tab found by index.
+     * Focuses a policies panel tab found by index.
      */
     private void FocusTabByIndex(int index) {
         var tabstrip = this.FindTabstrip();

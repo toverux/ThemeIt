@@ -68,6 +68,7 @@
         <Compile Include="GUI\ThemesManagerManager.cs" />
         <Compile Include="GUI\UIThemesManagerPanel.cs" />
         <Compile Include="GUI\ThemesTabManager.cs" />
+        <Compile Include="GUI\UIThemesManagerTitlePanel.cs" />
         <Compile Include="Locator.cs" />
         <Compile Include="Patcher.cs" />
         <Compile Include="Patches\DistrictWorldInfoPanelPatches.cs" />

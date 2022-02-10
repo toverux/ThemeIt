@@ -7,10 +7,16 @@ namespace ThemeIt.GUI;
  * Manages lifecycle of the only UIThemesManagerPanel instance that should exist.
  * It must be used to create/show/hide the Themes Manager panel.
  */
-internal class ThemesManagerManager {
+internal sealed class ThemesManagerManager {
     private GameObject? currentPanelGameObject;
 
     private UIThemesManagerPanel? currentPanel;
+
+    private readonly ThemeItMod mod;
+
+    internal ThemesManagerManager(ThemeItMod mod) {
+        this.mod = mod;
+    }
 
     /**
      * Opens the Themes Manager.
@@ -22,6 +28,11 @@ internal class ThemesManagerManager {
             this.currentPanelGameObject.transform.parent = UIView.GetAView().transform;
 
             this.currentPanel = this.currentPanelGameObject.AddComponent<UIThemesManagerPanel>();
+
+            this.currentPanel.Mod = this.mod;
+            this.currentPanel.ShouldClose += this.Close;
+
+            this.currentPanel.CenterOnScreen();
         }
 
         return this.currentPanel;

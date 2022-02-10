@@ -8,15 +8,11 @@ namespace ThemeIt.GUI;
 internal sealed class DistrictInfoPanelManager {
     private readonly ILogger logger;
 
-    private readonly DistrictWorldInfoPanel districtWorldInfoPanel;
+    private readonly ThemesTabManager themesTabManager;
 
-    private UIButton? FindPoliciesButton() => this.districtWorldInfoPanel.Find<UIButton>("PoliciesButton");
-
-    private UIDropDown? FindStyleDropdown() => this.districtWorldInfoPanel.Find<UIDropDown>("StyleDropdown");
-
-    internal DistrictInfoPanelManager(ILogger logger, DistrictWorldInfoPanel districtWorldInfoPanel) {
+    internal DistrictInfoPanelManager(ILogger logger, ThemesTabManager themesTabManager) {
         this.logger = logger;
-        this.districtWorldInfoPanel = districtWorldInfoPanel;
+        this.themesTabManager = themesTabManager;
     }
 
     /**
@@ -24,9 +20,9 @@ internal sealed class DistrictInfoPanelManager {
      * Also, it re-creates the "Policies" button from the base game, so both will have a coherent style (the button's
      * style from the base game is a bit bizarre, so I chose to apply our own style).
      */
-    internal void Install() {
-        var originalPoliciesButton = this.FindPoliciesButton();
-        var styleDropdown = this.FindStyleDropdown();
+    internal void Install(DistrictWorldInfoPanel infoPanel) {
+        var originalPoliciesButton = infoPanel.Find<UIButton>("PoliciesButton");
+        var styleDropdown = infoPanel.Find<UIDropDown>("StyleDropdown");
 
         if (originalPoliciesButton is null || styleDropdown is null) {
             this.logger.Error("Cannot find StyleDropdown or PoliciesButton, not updating district info panel.");
@@ -51,8 +47,8 @@ internal sealed class DistrictInfoPanelManager {
         //=> Open policies panel on click, but make sure it's not on the Themes tab (user explicitly clicked on
         //   "Policies" and not "Themes").
         policiesButton.eventClicked += (_, _) => {
-            this.districtWorldInfoPanel.OnPoliciesClick();
-            Locator.Current.Find<ThemesTabManager>().FocusDefaultTab();
+            infoPanel.OnPoliciesClick();
+            this.themesTabManager.FocusDefaultTab();
         };
 
         //=> Create a "Themes" button.
@@ -65,8 +61,8 @@ internal sealed class DistrictInfoPanelManager {
 
         //=> Open policies panel on click, and select Themes tab.
         themesButton.eventClicked += (_, _) => {
-            this.districtWorldInfoPanel.OnPoliciesClick();
-            Locator.Current.Find<ThemesTabManager>().FocusThemesTab();
+            infoPanel.OnPoliciesClick();
+            this.themesTabManager.FocusThemesTab();
         };
     }
 }

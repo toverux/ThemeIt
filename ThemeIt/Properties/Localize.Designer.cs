@@ -106,6 +106,15 @@ namespace ThemeIt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Themes Manager.
+        /// </summary>
+        internal static string GUI_UIThemesManagerTitlePanel_Title {
+            get {
+                return ResourceManager.GetString("GUI_UIThemesManagerTitlePanel_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create themes for growables and apply them to cities and districts..
         /// </summary>
         internal static string ThemeItMod_Description {

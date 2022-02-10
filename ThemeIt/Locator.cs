@@ -9,8 +9,6 @@ namespace ThemeIt;
 internal class Locator {
     private readonly Dictionary<Type, object?> container = new();
 
-    internal static Locator Current { get; } = new();
-
     internal T? TryFind<T>() {
         return this.container.TryGetValue(typeof(T), out var value) ? (T?) value : default;
     }

@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using JetBrains.Annotations;
+using ModsCommon;
 using ThemeIt.GUI;
 
 namespace ThemeIt.Patches;
@@ -9,12 +10,8 @@ internal static class DistrictWorldInfoPanelPatches {
     [HarmonyPostfix, UsedImplicitly]
     [HarmonyPatch("Start")]
     internal static void PostfixStart(DistrictWorldInfoPanel __instance) {
-        var logger = Locator.Current.Find<ThemeItMod>().Logger;
+        var locator = SingletonItem<ThemeItMod>.Instance.Locator;
 
-        var districtInfoPanelManager = new DistrictInfoPanelManager(logger, __instance);
-
-        districtInfoPanelManager.Install();
-
-        Locator.Current.Register(districtInfoPanelManager);
+        locator.Find<DistrictInfoPanelManager>().Install(__instance);
     }
 }

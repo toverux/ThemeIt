@@ -25,6 +25,8 @@ public sealed class ThemeItMod : BaseMod<ThemeItMod> {
 
     public override string Description => Localize.ThemeItMod_Description;
 
+    internal Locator Locator { get; }
+
     protected override ulong StableWorkshopId => 0;
 
     protected override ulong BetaWorkshopId => 0;
@@ -36,8 +38,12 @@ public sealed class ThemeItMod : BaseMod<ThemeItMod> {
     public ThemeItMod() {
         this.Patcher = new Patcher(this.IdRaw, this.Logger);
 
-        Locator.Current.Register(this);
-        Locator.Current.Register(new ThemesManagerManager());
+        this.Locator = new Locator();
+
+        this.Locator.Register(this);
+        this.Locator.Register(new ThemesManagerManager(this));
+        this.Locator.Register(new ThemesTabManager(this.Logger, this.Locator.Find<ThemesManagerManager>()));
+        this.Locator.Register(new DistrictInfoPanelManager(this.Logger, this.Locator.Find<ThemesTabManager>()));
     }
 
     protected override void SetCulture(CultureInfo culture) => Localize.Culture = culture;

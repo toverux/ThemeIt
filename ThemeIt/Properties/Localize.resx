@@ -36,4 +36,7 @@
     <data name="GUI_DistrictInfoPanelManager_Themes" xml:space="preserve">
         <value>Themes</value>
     </data>
+    <data name="GUI_UIThemesManagerTitlePanel_Title" xml:space="preserve">
+        <value>Themes Manager</value>
+    </data>
 </root>

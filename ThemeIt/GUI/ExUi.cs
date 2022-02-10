@@ -55,6 +55,27 @@ internal static class ExUi {
             componentUnder.relativePosition.y - componentAbove.size.y - spacing);
     }
 
+    public static void ResizeIcon(this UISprite icon, Vector2 maxSize) {
+        icon.width = icon.spriteInfo.width;
+        icon.height = icon.spriteInfo.height;
+
+        if (icon.height == 0) {
+            return;
+        }
+
+        var ratio = icon.width / icon.height;
+
+        if (icon.width > maxSize.x) {
+            icon.width = maxSize.x;
+            icon.height = maxSize.x / ratio;
+        }
+
+        if (icon.height > maxSize.y) {
+            icon.height = maxSize.y;
+            icon.width = maxSize.y * ratio;
+        }
+    }
+
     internal static TComponent AddUIComponent<TComponent>(
         this UIComponent parent, UIComponentOptions? options = null) where TComponent : UIComponent {
 

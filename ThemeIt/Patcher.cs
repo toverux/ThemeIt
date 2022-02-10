@@ -4,7 +4,7 @@ using ModsCommon;
 
 namespace ThemeIt;
 
-internal class Patcher {
+internal sealed class Patcher {
     private ILogger Logger { get; }
 
     private Harmony Harmony { get; }
