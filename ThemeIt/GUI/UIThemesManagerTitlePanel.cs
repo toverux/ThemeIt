@@ -52,7 +52,7 @@ internal sealed class UIThemesManagerTitlePanel : UIPanel {
     }
 
     protected override void OnSizeChanged() {
-        const int spacing = 10;
+        const int spacing = 8;
 
         this.iconSprite.relativePosition = new Vector3(spacing, (this.height - this.iconSprite.height) / 2);
 

@@ -66,6 +66,8 @@
     <ItemGroup>
         <Compile Include="GUI\DistrictInfoPanelManager.cs" />
         <Compile Include="GUI\ThemesManagerManager.cs" />
+        <Compile Include="GUI\UIThemesManagerBuildingRow.cs" />
+        <Compile Include="GUI\UIThemesManagerBuildingsListPanel.cs" />
         <Compile Include="GUI\UIThemesManagerPanel.cs" />
         <Compile Include="GUI\ThemesTabManager.cs" />
         <Compile Include="GUI\UIThemesManagerTitlePanel.cs" />
@@ -85,6 +87,7 @@
         <Compile Include="ThemeItMod.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="GUI\ExUi.cs" />
+        <Compile Include="ThirdParty\UIFastList.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
