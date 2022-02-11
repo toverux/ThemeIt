@@ -1,16 +1,17 @@
 ﻿using ColossalFramework.UI;
+using ThemeIt.GUI.ThemesManager;
 using UnityEngine;
 
 namespace ThemeIt.GUI;
 
 /**
- * Manages lifecycle of the only UIThemesManagerPanel instance that should exist.
+ * Manages lifecycle of the only ThemesManager.UIModalPanel instance that should exist.
  * It must be used to create/show/hide the Themes Manager panel.
  */
 internal sealed class ThemesManagerManager {
     private GameObject? currentPanelGameObject;
 
-    private UIThemesManagerPanel? currentPanel;
+    private UIModalPanel? currentPanel;
 
     private readonly ThemeItMod mod;
 
@@ -22,12 +23,12 @@ internal sealed class ThemesManagerManager {
      * Opens the Themes Manager.
      * The instance returned will be valid as long as the panel is open, so it must not be kept.
      */
-    internal UIThemesManagerPanel Open() {
+    internal UIModalPanel Open() {
         if (this.currentPanel is null) {
             this.currentPanelGameObject = new GameObject("ThemesManager");
             this.currentPanelGameObject.transform.parent = UIView.GetAView().transform;
 
-            this.currentPanel = this.currentPanelGameObject.AddComponent<UIThemesManagerPanel>();
+            this.currentPanel = this.currentPanelGameObject.AddComponent<UIModalPanel>();
 
             this.currentPanel.Mod = this.mod;
             this.currentPanel.ShouldClose += this.Close;

@@ -2,9 +2,12 @@
 using ColossalFramework.UI;
 using UnityEngine;
 
-namespace ThemeIt.GUI;
+namespace ThemeIt.GUI.ThemesManager;
 
-internal sealed class UIThemesManagerPanel : UIPanel {
+/**
+ * Main Themes Manager panel, opening as a modal.
+ */
+internal sealed class UIModalPanel : UIPanel {
     internal ThemeItMod Mod {
         set => this.titlePanel.Mod = value;
     }
@@ -15,22 +18,22 @@ internal sealed class UIThemesManagerPanel : UIPanel {
 
     private const float HeightFactorToContainer = .6f;
 
-    private readonly UIThemesManagerTitlePanel titlePanel;
+    private readonly UITitlePanel titlePanel;
 
-    private readonly UIThemesManagerBuildingsListPanel buildingsListPanel;
+    private readonly UIBuildingsListPanel buildingsListPanel;
 
-    internal UIThemesManagerPanel() {
+    internal UIModalPanel() {
         //=> Self properties.
         this.backgroundSprite = "UnlockingPanel2";
 
         //=> Title bar panel at the top.
-        this.titlePanel = this.AddUIComponent<UIThemesManagerTitlePanel>();
+        this.titlePanel = this.AddUIComponent<UITitlePanel>();
         this.titlePanel.DragHandleTarget = this;
 
         this.titlePanel.ShouldClose += () => this.ShouldClose?.Invoke();
 
         //=> Scrollable list of buildings
-        this.buildingsListPanel = this.AddUIComponent<UIThemesManagerBuildingsListPanel>();
+        this.buildingsListPanel = this.AddUIComponent<UIBuildingsListPanel>();
     }
 
     internal void CenterOnScreen() {
@@ -39,8 +42,8 @@ internal sealed class UIThemesManagerPanel : UIPanel {
         var host = this.GetUIView();
 
         this.size = new Vector2(
-            Mathf.Floor(host.fixedWidth * UIThemesManagerPanel.WidthFactorToContainer),
-            Mathf.Floor(host.fixedHeight * UIThemesManagerPanel.HeightFactorToContainer));
+            Mathf.Floor(host.fixedWidth * UIModalPanel.WidthFactorToContainer),
+            Mathf.Floor(host.fixedHeight * UIModalPanel.HeightFactorToContainer));
 
         this.relativePosition = new Vector3(
             Mathf.Floor((host.fixedWidth - this.width) / 2),

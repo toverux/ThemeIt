@@ -2,9 +2,12 @@
 using ColossalFramework.UI;
 using UnityEngine;
 
-namespace ThemeIt.GUI;
+namespace ThemeIt.GUI.ThemesManager;
 
-internal sealed class UIThemesManagerTitlePanel : UIPanel {
+/**
+ * Top title bar of the Themes Manager modal.
+ */
+internal sealed class UITitlePanel : UIPanel {
     internal ThemeItMod Mod {
         set => this.modLabel.text = value.Name;
     }
@@ -26,7 +29,7 @@ internal sealed class UIThemesManagerTitlePanel : UIPanel {
 
     private readonly UILabel modLabel;
 
-    internal UIThemesManagerTitlePanel() {
+    internal UITitlePanel() {
         //=> Icon.
         this.iconSprite = this.AddUIComponent<UISprite>();
         this.iconSprite.spriteName = "ToolbarIconZoomOutCity";

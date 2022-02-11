@@ -66,11 +66,11 @@
     <ItemGroup>
         <Compile Include="GUI\DistrictInfoPanelManager.cs" />
         <Compile Include="GUI\ThemesManagerManager.cs" />
-        <Compile Include="GUI\UIThemesManagerBuildingRow.cs" />
-        <Compile Include="GUI\UIThemesManagerBuildingsListPanel.cs" />
-        <Compile Include="GUI\UIThemesManagerPanel.cs" />
+        <Compile Include="GUI\ThemesManager\UIBuildingRowPanel.cs" />
+        <Compile Include="GUI\ThemesManager\UIBuildingsListPanel.cs" />
+        <Compile Include="GUI\ThemesManager\UIModalPanel.cs" />
+        <Compile Include="GUI\ThemesManager\UITitlePanel.cs" />
         <Compile Include="GUI\ThemesTabManager.cs" />
-        <Compile Include="GUI\UIThemesManagerTitlePanel.cs" />
         <Compile Include="Locator.cs" />
         <Compile Include="Patcher.cs" />
         <Compile Include="Patches\DistrictWorldInfoPanelPatches.cs" />

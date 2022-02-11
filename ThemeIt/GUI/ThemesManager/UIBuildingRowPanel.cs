@@ -1,9 +1,12 @@
 ﻿using ColossalFramework.UI;
 using ThemeIt.ThirdParty;
 
-namespace ThemeIt.GUI;
+namespace ThemeIt.GUI.ThemesManager;
 
-internal sealed class UIThemesManagerBuildingRow : UIPanel, IUIFastListRow {
+/**
+ * A row showing a building, displayed in the buildings list.
+ */
+internal sealed class UIBuildingRowPanel : UIPanel, IUIFastListRow {
     public void Display(object data, bool isRowOdd) {
     }
 

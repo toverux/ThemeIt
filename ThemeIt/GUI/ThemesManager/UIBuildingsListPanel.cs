@@ -2,13 +2,16 @@
 using ThemeIt.ThirdParty;
 using UnityEngine;
 
-namespace ThemeIt.GUI;
+namespace ThemeIt.GUI.ThemesManager;
 
-internal sealed class UIThemesManagerBuildingsListPanel : UIPanel {
+/**
+ * Panel hosting the list of buildings in a theme, and the buttons for creating/deleting themes.
+ */
+internal sealed class UIBuildingsListPanel : UIPanel {
     private readonly UIFastList fastList;
 
-    internal UIThemesManagerBuildingsListPanel() {
-        this.fastList = UIFastList.Create<UIThemesManagerBuildingRow>(this);
+    internal UIBuildingsListPanel() {
+        this.fastList = UIFastList.Create<UIBuildingRowPanel>(this);
 
         this.fastList.BackgroundSprite = "UnlockingPanel";
         this.fastList.CanSelect = true;
